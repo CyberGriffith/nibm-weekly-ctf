@@ -7,6 +7,12 @@
 <link rel="stylesheet" href="style2.css">
 </head>
 <body>
+<div class="bg-base"></div>
+<div class="bg-red"></div>
+<div class="bg-cyan"></div>
+<div class="bg-scan"></div>
+<div class="bg-flicker"></div>
+<div class="bg-vignette"></div>
 
 <div class="wrap">
 
@@ -45,14 +51,14 @@ It won't open. V left something inside.
 <details><summary>💡 Hint 4</summary><p>The image won't open. Something's wrong with its header. Look up "PNG magic bytes."</p></details>
 
 <h2>Submit</h2>
-<form class="submit-form" id="flagForm">
+<form class="submit-form" id="flagForm" onsubmit="return false;">
   <label for="name">Discord handle / Name *</label>
   <input type="text" id="name" required autocomplete="off">
   <label for="team">Team name (optional)</label>
   <input type="text" id="team" autocomplete="off">
   <label for="flag">Flag *</label>
   <input type="text" id="flag" required autocomplete="off" placeholder="NIBM{...}">
-  <button type="submit" id="submitBtn">→ SUBMIT FLAG</button>
+  <button type="button" id="submitBtn" style="margin-top:16px;padding:12px 24px;background:#66ccff;color:#000;border:none;border-radius:4px;font-weight:bold;cursor:pointer;font-family:inherit;font-size:1em;letter-spacing:1px;">→ SUBMIT FLAG</button>
   <div id="result"></div>
 </form>
 
@@ -66,35 +72,89 @@ It won't open. V left something inside.
 
 <blockquote>"Some doors are locked for a reason. Others just look that way." — V</blockquote>
 
+<footer style="margin-top:50px; padding-top:20px; border-top:1px solid #333; color:#666; font-size:0.85em; text-align:center;">
+  Crafted by <span style="color:#ff5555; font-weight:bold; text-shadow:0 0 8px rgba(255,85,85,0.6);">Cyber Griffith</span>
+  <br>
+  <span style="font-size:0.9em;">NIBM Cyber Security Club · Project Blackout · 2026</span>
+</footer>
+
 </div>
 
 <script>
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxwGIyxxvFWka8HwW9EJz3ofbx8SrMJF0HDOm9LXXX6eJ82r_da-nsbX-cT6ndMoRdF5A/exec';
-document.getElementById('flagForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  const result = document.getElementById('result');
-  const name = document.getElementById('name').value.trim();
-  const team = document.getElementById('team').value.trim();
-  const flag = document.getElementById('flag').value.trim();
-  btn.disabled = true; btn.textContent = 'SUBMITTING...';
-  result.className = ''; result.style.display = 'none';
-  try {
-    await fetch(WEB_APP_URL, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ name, team, flag, week: 'week1' })
-    });
-    result.className = 'ok';
-    result.textContent = '✅ Submitted! If correct, your score is logged.';
-    document.getElementById('flagForm').reset();
-  } catch (err) {
-    result.className = 'error';
-    result.textContent = '⚠️ Something went wrong. Try again.';
-  } finally {
-    btn.disabled = false; btn.textContent = '→ SUBMIT FLAG';
+(function(){
+  var WEB_APP_URL = 'https://nibm-ctf-proxy.anukwickramasinghe7.workers.dev';
+
+  function showResult(cls, html){
+    var el = document.getElementById('result');
+    if (!el) { return; }
+    el.className = cls;
+    el.innerHTML = html;
+    el.style.display = 'block';
+    el.style.marginTop = '16px';
+    el.style.padding = '14px';
+    el.style.borderRadius = '4px';
+    el.style.fontSize = '1.05em';
+    if (cls === 'ok') {
+      el.style.background = 'rgba(13,40,24,0.95)';
+      el.style.border = '2px solid #2ea043';
+      el.style.color = '#3fb950';
+    } else if (cls === 'error') {
+      el.style.background = 'rgba(45,15,15,0.95)';
+      el.style.border = '2px solid #f85149';
+      el.style.color = '#ff7b72';
+    } else {
+      el.style.background = 'transparent';
+      el.style.border = 'none';
+      el.style.color = 'inherit';
+      el.style.padding = '0';
+      el.style.display = 'none';
+    }
   }
-});
+
+  function submitFlag(){
+    var btn = document.getElementById('submitBtn');
+    var nameEl = document.getElementById('name');
+    var teamEl = document.getElementById('team');
+    var flagEl = document.getElementById('flag');
+
+    var name = nameEl.value.trim();
+    var team = teamEl.value.trim();
+    var flag = flagEl.value.trim();
+
+    if (!name) { showResult('error', '⚠️ Enter your Discord handle / name first.'); return; }
+    if (!flag) { showResult('error', '⚠️ Enter a flag first.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'CHECKING...';
+    showResult('', '');
+
+    fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ name: name, team: team, flag: flag, week: 'week1' })
+    })
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if (data.status === 'correct') {
+        showResult('ok', '<strong>✅ Correct!</strong> +' + data.points + ' pts. Nice work.');
+        document.getElementById('flagForm').reset();
+      } else if (data.status === 'wrong') {
+        showResult('error', '<strong>❌ Wrong flag.</strong> Check your work and try again.');
+      } else {
+        showResult('error', '⚠️ ' + (data.message || 'Server error.'));
+      }
+    })
+    .catch(function(err){
+      showResult('error', '⚠️ Network error: ' + err.message);
+    })
+    .then(function(){
+      btn.disabled = false;
+      btn.textContent = '→ SUBMIT FLAG';
+    });
+  }
+
+  document.getElementById('submitBtn').onclick = submitFlag;
+})();
 </script>
 
 </body>
