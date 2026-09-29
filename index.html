@@ -2,29 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>File 0x01 — The Brief</title>
-<style>
-body { font-family: 'Courier New', monospace; max-width: 720px; margin: 40px auto; padding: 20px; background: #0a0a0a; color: #d0d0d0; line-height: 1.7; }
-h1 { color: #ff5555; border-bottom: 1px solid #333; padding-bottom: 10px; }
-h2 { color: #ff5555; margin-top: 30px; }
-a { color: #66ccff; }
-code { background: #1a1a1a; padding: 2px 6px; border-radius: 4px; color: #88ff88; }
-.incident { background: #111; padding: 20px; border-radius: 6px; border-left: 3px solid #ff5555; margin: 20px 0; }
-.file-meta { background: #111; padding: 15px; border-radius: 6px; border: 1px solid #333; font-size: 0.9em; margin: 20px 0; }
-.file-meta td { padding: 4px 12px 4px 0; }
-.file-meta td:first-child { color: #888; }
-.download { display: inline-block; background: #ff5555; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 4px; margin: 20px 0; font-weight: bold; letter-spacing: 1px; }
-details { background: #111; padding: 12px 16px; margin: 10px 0; border-radius: 6px; border-left: 3px solid #ffaa00; }
-summary { cursor: pointer; color: #ffaa00; font-weight: bold; }
-.flag-format { background: #111; padding: 12px; border-radius: 6px; text-align: center; margin: 20px 0; border: 1px dashed #66ccff; }
-.submit { display: inline-block; background: #66ccff; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 4px; margin-top: 10px; font-weight: bold; }
-blockquote { border-left: 3px solid #333; padding-left: 15px; color: #999; font-style: italic; }
-.redacted { background: #000; color: #000; user-select: none; }
-.deadline { color: #ff5555; font-weight: bold; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<div class="wrap">
 <h1>📁 FILE 0x01 — "brief.pdf"</h1>
 
 <div class="incident">
@@ -50,20 +34,26 @@ It won't open. V left something inside.
 
 <a class="download" href="brief.pdf" download>⬇ DOWNLOAD brief.pdf</a>
 
-<div class="flag-format">
-Flag format: <code>NIBM{...}</code>
-</div>
+<div class="flag-format">Flag format: <code>NIBM{...}</code></div>
 
 <h2>Hints</h2>
 <p>Reveal only if stuck for 10+ minutes.</p>
-
 <details><summary>💡 Hint 1</summary><p>The file says it's a PDF. Does it actually behave like one?</p></details>
 <details><summary>💡 Hint 2</summary><p>Run <code>file brief.pdf</code> in a terminal. What does it say it really is?</p></details>
 <details><summary>💡 Hint 3</summary><p>If it's a ZIP, extract it. Not every flag you find is real — verify before you submit.</p></details>
 <details><summary>💡 Hint 4</summary><p>The image won't open. Something's wrong with its header. Look up "PNG magic bytes."</p></details>
 
 <h2>Submit</h2>
-<a class="submit" href="YOUR_GOOGLE_FORM_LINK">→ SUBMIT FLAG</a>
+<form class="submit-form" id="flagForm">
+  <label for="name">Discord handle / Name *</label>
+  <input type="text" id="name" required autocomplete="off">
+  <label for="team">Team name (optional)</label>
+  <input type="text" id="team" autocomplete="off">
+  <label for="flag">Flag *</label>
+  <input type="text" id="flag" required autocomplete="off" placeholder="NIBM{...}">
+  <button type="submit" id="submitBtn">→ SUBMIT FLAG</button>
+  <div id="result"></div>
+</form>
 
 <h2>Rules</h2>
 <ul>
@@ -73,9 +63,37 @@ Flag format: <code>NIBM{...}</code>
 <li>Stuck? Ask in <code>#help</code>. We'll point, not tell.</li>
 </ul>
 
-<blockquote>
-"Some doors are locked for a reason. Others just look that way." — V
-</blockquote>
+<blockquote>"Some doors are locked for a reason. Others just look that way." — V</blockquote>
+</div>
+
+<script>
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxwGIyxxvFWka8HwW9EJz3ofbx8SrMJF0HDOm9LXXX6eJ82r_da-nsbX-cT6ndMoRdF5A/exec';
+document.getElementById('flagForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const result = document.getElementById('result');
+  const name = document.getElementById('name').value.trim();
+  const team = document.getElementById('team').value.trim();
+  const flag = document.getElementById('flag').value.trim();
+  btn.disabled = true; btn.textContent = 'SUBMITTING...';
+  result.className = ''; result.style.display = 'none';
+  try {
+    await fetch(WEB_APP_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ name, team, flag, week: 'week1' })
+    });
+    result.className = 'ok';
+    result.textContent = '✅ Submitted! If correct, your score is logged.';
+    document.getElementById('flagForm').reset();
+  } catch (err) {
+    result.className = 'error';
+    result.textContent = '⚠️ Something went wrong. Try again.';
+  } finally {
+    btn.disabled = false; btn.textContent = '→ SUBMIT FLAG';
+  }
+});
+</script>
 
 </body>
 </html>
