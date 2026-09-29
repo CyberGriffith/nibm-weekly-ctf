@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>File 0x01 — The Brief</title>
+<style>
+body { font-family: 'Courier New', monospace; max-width: 720px; margin: 40px auto; padding: 20px; background: #0a0a0a; color: #d0d0d0; line-height: 1.7; }
+h1 { color: #ff5555; border-bottom: 1px solid #333; padding-bottom: 10px; }
+h2 { color: #ff5555; margin-top: 30px; }
+a { color: #66ccff; }
+code { background: #1a1a1a; padding: 2px 6px; border-radius: 4px; color: #88ff88; }
+.incident { background: #111; padding: 20px; border-radius: 6px; border-left: 3px solid #ff5555; margin: 20px 0; }
+.file-meta { background: #111; padding: 15px; border-radius: 6px; border: 1px solid #333; font-size: 0.9em; margin: 20px 0; }
+.file-meta td { padding: 4px 12px 4px 0; }
+.file-meta td:first-child { color: #888; }
+.download { display: inline-block; background: #ff5555; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 4px; margin: 20px 0; font-weight: bold; letter-spacing: 1px; }
+details { background: #111; padding: 12px 16px; margin: 10px 0; border-radius: 6px; border-left: 3px solid #ffaa00; }
+summary { cursor: pointer; color: #ffaa00; font-weight: bold; }
+.flag-format { background: #111; padding: 12px; border-radius: 6px; text-align: center; margin: 20px 0; border: 1px dashed #66ccff; }
+.submit { display: inline-block; background: #66ccff; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 4px; margin-top: 10px; font-weight: bold; }
+blockquote { border-left: 3px solid #333; padding-left: 15px; color: #999; font-style: italic; }
+.redacted { background: #000; color: #000; user-select: none; }
+.deadline { color: #ff5555; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>📁 FILE 0x01 — "brief.pdf"</h1>
+
+<div class="incident">
+<strong>INCIDENT REPORT — RECOVERED ARTIFACT</strong><br><br>
+A USB drive was found in the CS lab, locker 14, last Friday.
+It belonged to a club member known only as <strong>"V"</strong>,
+who stopped attending last semester.<br><br>
+The drive contained a single file: <code>brief.pdf</code>.
+It won't open. V left something inside.
+</div>
+
+<div class="file-meta">
+<table>
+<tr><td>FILENAME</td><td>brief.pdf</td></tr>
+<tr><td>RECOVERED FROM</td><td>USB — locker 14</td></tr>
+<tr><td>OWNER</td><td><span class="redacted">████████</span> (V)</td></tr>
+<tr><td>STATUS</td><td>Unopened</td></tr>
+<tr><td>DEADLINE</td><td class="deadline">Sunday 11:59 PM</td></tr>
+</table>
+</div>
+
+<p><strong>Your task:</strong> Open the file. Find what V hid. Submit the flag.</p>
+
+<a class="download" href="brief.pdf" download>⬇ DOWNLOAD brief.pdf</a>
+
+<div class="flag-format">
+Flag format: <code>NIBM{...}</code>
+</div>
+
+<h2>Hints</h2>
+<p>Reveal only if stuck for 10+ minutes.</p>
+
+<details><summary>💡 Hint 1</summary><p>The file says it's a PDF. Does it actually behave like one?</p></details>
+<details><summary>💡 Hint 2</summary><p>Run <code>file brief.pdf</code> in a terminal. What does it say it really is?</p></details>
+<details><summary>💡 Hint 3</summary><p>If it's a ZIP, extract it. Not every flag you find is real — verify before you submit.</p></details>
+<details><summary>💡 Hint 4</summary><p>The image won't open. Something's wrong with its header. Look up "PNG magic bytes."</p></details>
+
+<h2>Submit</h2>
+<a class="submit" href="YOUR_GOOGLE_FORM_LINK">→ SUBMIT FLAG</a>
+
+<h2>Rules</h2>
+<ul>
+<li>No attacking the infrastructure or other teams.</li>
+<li>No flag sharing.</li>
+<li>Google is allowed. Asking for the answer isn't.</li>
+<li>Stuck? Ask in <code>#help</code>. We'll point, not tell.</li>
+</ul>
+
+<blockquote>
+"Some doors are locked for a reason. Others just look that way." — V
+</blockquote>
+
+</body>
+</html>
