@@ -46,3 +46,14 @@ form.submit-form button { margin-top: 16px; padding: 12px 24px; background: #66c
 #result { margin-top: 16px; padding: 12px; border-radius: 4px; display: none; }
 #result.ok    { background: rgba(13,40,24,0.9); border: 1px solid #2ea043; color: #3fb950; display: block; }
 #result.error { background: rgba(45,30,15,0.9); border: 1px solid #d29922; color: #e3b341; display: block; }
+
+/* ── Slow background zoom (Ken Burns) ───────────────── */
+@keyframes kenburns {
+  0%   { background-size: 100% auto; background-position: center center; }
+  50%  { background-size: 115% auto; background-position: 45% 45%; }
+  100% { background-size: 100% auto; background-position: center center; }
+}
+
+body {
+  animation: kenburns 40s ease-in-out infinite;
+}
